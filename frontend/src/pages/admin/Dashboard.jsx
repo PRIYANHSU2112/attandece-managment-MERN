@@ -212,9 +212,7 @@ const AdminDashboard = () => {
 
 
           <div className="flex items-center gap-2 lg:gap-6">
-            <div className="hidden xs:block">
-              <ThemeToggle />
-            </div>
+            <ThemeToggle />
 
             <div className="flex items-center rounded-xl border dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-2 lg:px-3 py-1.5 lg:py-2 text-slate-600 dark:text-slate-400">
               <Calendar size={16} className="lg:mr-2 text-slate-400" />
