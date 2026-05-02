@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const overtimeApi = createApi({
   reducerPath: 'overtimeApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:5000/api/',
+    baseUrl: 'https://attandece-managment-mern.onrender.com/api/',
     prepareHeaders: (headers, { getState }) => {
       const token = getState().auth.token;
       if (token) {
@@ -54,3 +54,4 @@ export const {
   useUpdateOvertimeStatusMutation,
   useGetMyOvertimeQuery,
 } = overtimeApi;
+

@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:5000/api/',
+    baseUrl: 'https://attandece-managment-mern.onrender.com/api/',
     prepareHeaders: (headers, { getState }) => {
       const token = getState().auth.token;
       if (token) {
@@ -34,3 +34,4 @@ export const authApi = createApi({
 });
 
 export const { useLoginMutation, useRegisterMutation, useGetProfileQuery } = authApi;
+

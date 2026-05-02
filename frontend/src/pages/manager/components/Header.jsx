@@ -2,12 +2,17 @@ import React from 'react';
 import { Search, Calendar, FileSpreadsheet } from 'lucide-react';
 import ThemeToggle from '../../../components/ThemeToggle';
 import moment from 'moment';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../../../features/auth/authSlice';
 
-const Header = ({ activeTab, searchQuery, setSearchQuery, selectedDate, setSelectedDate, adminProfile, setProfileModalOpen }) => {
+
+const Header = ({ activeTab, searchQuery, setSearchQuery, selectedDate, setSelectedDate, setProfileModalOpen }) => {
+  const currentUser = useSelector(selectCurrentUser);
+  
   const handleExport = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/attendance/export?teamOnly=true`, {
+      const response = await fetch(`https://attandece-managment-mern.onrender.com/api/attendance/export?teamOnly=true`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -56,13 +61,13 @@ const Header = ({ activeTab, searchQuery, setSearchQuery, selectedDate, setSelec
           onClick={() => setProfileModalOpen(true)}
         >
           <div className="text-right">
-            <p className="text-sm font-bold text-slate-800 dark:text-slate-200">{adminProfile?.name || 'Manager'}</p>
+            <p className="text-sm font-bold text-slate-800 dark:text-slate-200">{currentUser?.name || 'Manager'}</p>
             <p className="text-[10px] font-bold text-emerald-500 flex items-center justify-end">
               <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-1.5 animate-pulse"></span>ONLINE
             </p>
           </div>
           <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-black shadow-inner uppercase">
-            {adminProfile?.name?.substring(0, 2) || 'MG'}
+            {currentUser?.name?.substring(0, 2) || 'MG'}
           </div>
         </div>
       </div>
@@ -70,4 +75,6 @@ const Header = ({ activeTab, searchQuery, setSearchQuery, selectedDate, setSelec
   );
 };
 
+
 export default Header;
+

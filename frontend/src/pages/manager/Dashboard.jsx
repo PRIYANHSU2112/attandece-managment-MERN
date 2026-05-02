@@ -16,6 +16,9 @@ import {
   ClipboardList, Clock, LayoutDashboard, FileSpreadsheet
 } from 'lucide-react';
 import moment from 'moment';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../../features/auth/authSlice';
+
 
 // Sub-components
 import Sidebar from './components/Sidebar';
@@ -39,8 +42,11 @@ const ManagerDashboard = () => {
   const [isProfileModalOpen, setProfileModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const currentUser = useSelector(selectCurrentUser);
+  
   // Queries
   const { data: adminProfile } = useGetUserProfileQuery();
+
   const { data: teamData } = useGetTeamQuery({ page: 1, limit: 100 }); 
   const { data: attendanceData, refetch: refetchAttendance } = useGetTeamAttendanceQuery({ date: selectedDate, page, limit: 10 });
   const { data: pendingOtData } = useGetPendingOvertimeQuery({ page, limit: 10, search: searchQuery });
@@ -72,7 +78,7 @@ const ManagerDashboard = () => {
   const handleExport = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/attendance/export?teamOnly=true`, {
+      const response = await fetch(`https://attandece-managment-mern.onrender.com/api/attendance/export?teamOnly=true`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -179,3 +185,4 @@ const ManagerDashboard = () => {
 };
 
 export default ManagerDashboard;
+

@@ -17,6 +17,9 @@ import {
   LayoutDashboard, LogOut, Bell, FileSpreadsheet, Users, Settings
 } from 'lucide-react';
 import moment from 'moment';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../../features/auth/authSlice';
+
 
 // Sub-components
 import OverviewTab from './components/OverviewTab';
@@ -39,9 +42,12 @@ const AdminDashboard = () => {
   const [isProfileModalOpen, setProfileModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const currentUser = useSelector(selectCurrentUser);
+  
   // Queries
   const { data: userData } = useGetUsersQuery({ page, limit: 10 });
   const { data: adminProfile } = useGetUserProfileQuery();
+
   const { data: attendanceData, refetch: refetchAttendance } = useGetAllAttendanceQuery({ date: selectedDate, page, limit: 10 });
   const { data: pendingOtData } = useGetPendingOvertimeQuery({ page, limit: 10, search: searchQuery });
   const { data: allOtData } = useGetAllOvertimeQuery({ page, limit: 10, search: searchQuery, status: 'All' });
@@ -67,7 +73,7 @@ const AdminDashboard = () => {
   const handleExport = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/attendance/export`, {
+      const response = await fetch(`https://attandece-managment-mern.onrender.com/api/attendance/export`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -190,12 +196,13 @@ const AdminDashboard = () => {
               onClick={() => setProfileModalOpen(true)}
             >
               <div className="text-right">
-                <p className="text-sm font-bold text-slate-800 dark:text-slate-200">{adminProfile?.name || 'Super Admin'}</p>
+                <p className="text-sm font-bold text-slate-800 dark:text-slate-200">{currentUser?.name || 'Super Admin'}</p>
                 <p className="text-[10px] font-bold text-emerald-500 flex items-center justify-end"><span className="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-1.5 animate-pulse"></span>ONLINE</p>
               </div>
               <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-500/20 rounded-xl flex items-center justify-center text-indigo-700 dark:text-indigo-400 font-black shadow-inner uppercase">
-                {adminProfile?.name?.substring(0, 2) || 'AD'}
+                {currentUser?.name?.substring(0, 2) || 'AD'}
               </div>
+
             </div>
           </div>
         </header>
@@ -260,3 +267,4 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+
