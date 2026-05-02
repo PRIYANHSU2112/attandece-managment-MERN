@@ -52,9 +52,10 @@ const Auth = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-500 to-indigo-800 dark:from-slate-900 dark:to-slate-950 p-4 transition-colors duration-500">
-      <div className="relative w-full max-w-4xl overflow-hidden rounded-2xl bg-white dark:bg-slate-900 shadow-2xl md:flex min-h-[600px] transition-colors">
+      <div className="relative w-full max-w-4xl overflow-hidden rounded-3xl bg-white dark:bg-slate-900 shadow-2xl md:flex min-h-[600px] transition-colors">
         
-        <div className={`w-full p-8 transition-all duration-500 md:w-1/2 ${isLogin ? 'translate-x-0 opacity-100' : 'md:translate-x-full opacity-0 pointer-events-none'}`}>
+        <div className={`w-full p-8 md:p-12 transition-all duration-500 md:w-1/2 ${isLogin ? 'block opacity-100' : 'hidden md:block md:translate-x-full md:opacity-0 pointer-events-none'}`}>
+
           <div className="mx-auto max-w-sm">
             <h2 className="mb-6 text-3xl font-bold text-gray-800 dark:text-slate-100">Welcome Back</h2>
             <form onSubmit={handleLoginSubmit} className="space-y-4">
@@ -95,7 +96,8 @@ const Auth = () => {
           </div>
         </div>
 
-        <div className={`w-full p-8 transition-all duration-500 md:w-1/2 ${!isLogin ? 'translate-x-0 opacity-100' : 'md:-translate-x-full opacity-0 pointer-events-none'}`}>
+        <div className={`w-full p-8 md:p-12 transition-all duration-500 md:w-1/2 ${!isLogin ? 'block opacity-100' : 'hidden md:block md:-translate-x-full md:opacity-0 pointer-events-none'}`}>
+
           <div className="mx-auto max-w-sm">
             <h2 className="mb-6 text-3xl font-bold text-gray-800 dark:text-slate-100">Join Us</h2>
             <form onSubmit={handleRegisterSubmit} className="space-y-4">

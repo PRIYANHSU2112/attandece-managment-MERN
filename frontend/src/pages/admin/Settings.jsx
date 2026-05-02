@@ -100,24 +100,27 @@ const AdminSettings = () => {
         <div className="grid grid-cols-1 gap-8">
           
           {/* Settings Form */}
-          <div className="glass-card rounded-[2rem] p-8 space-y-8 transition-colors">
-            <div className="flex items-center gap-3">
-              <div className="p-3 bg-brand-primary/10 dark:bg-brand-primary/20 rounded-2xl text-brand-primary">
-                <Settings className="w-6 h-6" />
-              </div>
-              <div className="flex-1">
-                <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Geofencing Configuration</h2>
-                <p className="text-slate-400 dark:text-slate-500 text-xs">Define office boundaries and coordinates</p>
+          <div className="glass-card rounded-[2rem] p-4 lg:p-8 space-y-6 lg:space-y-8 transition-colors">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="flex items-center gap-3">
+                <div className="p-3 bg-brand-primary/10 dark:bg-brand-primary/20 rounded-2xl text-brand-primary">
+                  <Settings className="w-6 h-6" />
+                </div>
+                <div className="flex-1">
+                  <h2 className="text-lg lg:text-xl font-bold text-slate-800 dark:text-slate-100">Geofencing Configuration</h2>
+                  <p className="text-slate-400 dark:text-slate-500 text-[10px] lg:text-xs">Define office boundaries and coordinates</p>
+                </div>
               </div>
               <button 
                 type="button"
                 onClick={handleGetLocation}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs font-bold hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-colors border border-indigo-100 dark:border-indigo-500/20"
+                className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs font-bold hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-colors border border-indigo-100 dark:border-indigo-500/20 w-full sm:w-auto"
               >
                 <Locate className="w-4 h-4" />
                 Get My Location
               </button>
             </div>
+
 
             {message.text && (
               <div className={`p-4 rounded-2xl flex items-center gap-3 text-sm animate-in fade-in slide-in-from-top-2 transition-colors ${

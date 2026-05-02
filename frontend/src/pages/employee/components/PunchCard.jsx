@@ -19,13 +19,15 @@ const PunchCard = ({
 }) => {
   return (
     <div className="glass-card rounded-[2rem] overflow-hidden border-t-4 border-brand-primary">
-      <div className="p-1 px-1">
-        <div className="bg-white/60 dark:bg-slate-900/40 rounded-[1.8rem] p-6 lg:p-8 transition-colors duration-700">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="p-0.5 lg:p-1">
+        <div className="bg-white/60 dark:bg-slate-900/40 rounded-[1.8rem] p-4 lg:p-8 transition-colors duration-700">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+
             
             {/* Visual Preview */}
             <div className="space-y-4">
-              <div className="aspect-square rounded-3xl overflow-hidden bg-slate-100 dark:bg-slate-800 border-4 border-white dark:border-slate-700 shadow-inner relative group transition-colors duration-700">
+              <div className="aspect-video lg:aspect-square rounded-3xl overflow-hidden bg-slate-100 dark:bg-slate-800 border-4 border-white dark:border-slate-700 shadow-inner relative group transition-colors duration-700">
+
                 {!isPunchedIn ? (
                   isCameraOpen ? (
                     <Webcam
@@ -52,25 +54,28 @@ const PunchCard = ({
                   </div>
                 )}
                 
-                <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center">
-                  <div className="bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-full text-xs text-white flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5" />
-                    {location ? `${location.latitude}, ${location.longitude}` : 'Locating...'}
+                <div className="absolute bottom-3 lg:bottom-4 left-3 lg:left-4 right-3 lg:right-4 flex justify-between items-center">
+                  <div className="bg-black/50 backdrop-blur-md px-2 lg:px-3 py-1 lg:py-1.5 rounded-full text-[9px] lg:text-xs text-white flex items-center gap-1 lg:gap-1.5 border border-white/10">
+                    <MapPin className="w-3 lg:w-3.5 h-3 lg:h-3.5" />
+                    <span className="truncate max-w-[150px] lg:max-w-none">
+                      {location ? `${Number(location.latitude).toFixed(4)}, ${Number(location.longitude).toFixed(4)}` : 'Locating...'}
+                    </span>
                   </div>
                 </div>
               </div>
               
-              <div className="flex items-center gap-4 text-xs text-slate-400 dark:text-slate-500 px-2">
+              <div className="flex flex-wrap items-center gap-3 lg:gap-4 text-[10px] lg:text-xs text-slate-400 dark:text-slate-500 px-2">
                 <div className="flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                  <CheckCircle2 className="w-3 lg:w-3.5 h-3 lg:h-3.5 text-emerald-500" />
                   Selfie Verification
                 </div>
                 <div className="flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                  <CheckCircle2 className="w-3 lg:w-3.5 h-3 lg:h-3.5 text-emerald-500" />
                   Geofencing Active
                 </div>
               </div>
             </div>
+
 
             {/* Actions & Info */}
             <div className="flex flex-col justify-between py-2">

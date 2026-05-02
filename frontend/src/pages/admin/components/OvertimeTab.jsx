@@ -36,8 +36,8 @@ const OvertimeTab = ({ otData, updateOTStatus }) => {
                 "{ot.reason}"
               </div>
 
-              <div className="flex items-center justify-between lg:justify-end gap-4 min-w-[300px]">
-                <div className="bg-amber-500 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-amber-100 dark:shadow-amber-900/20 whitespace-nowrap transition-colors">
+              <div className="flex items-center justify-between lg:justify-end gap-3 min-w-full lg:min-w-[300px]">
+                <div className="bg-amber-500 text-white px-3 lg:px-4 py-2 rounded-xl text-[9px] lg:text-[10px] font-black uppercase tracking-[0.1em] lg:tracking-[0.2em] shadow-lg shadow-amber-100 dark:shadow-amber-900/20 whitespace-nowrap transition-colors">
                   {ot.requestedHours} Hours
                 </div>
 
@@ -46,22 +46,22 @@ const OvertimeTab = ({ otData, updateOTStatus }) => {
                     <>
                       <button
                         onClick={() => updateOTStatus({ id: ot._id, status: 'Approved' })}
-                        className="bg-emerald-500 hover:bg-emerald-600 text-white font-black px-5 py-3 rounded-xl transition active:scale-95 flex items-center gap-2 uppercase text-[10px] tracking-widest shadow-lg shadow-emerald-100 dark:shadow-emerald-900/20"
+                        className="bg-emerald-500 hover:bg-emerald-600 text-white font-black px-3 lg:px-5 py-2 lg:py-3 rounded-xl transition active:scale-95 flex items-center gap-1.5 lg:gap-2 uppercase text-[9px] lg:text-[10px] tracking-wider lg:tracking-widest shadow-lg shadow-emerald-100 dark:shadow-emerald-900/20"
                       >
-                        <CheckCircle size={16} /> Approve
+                        <CheckCircle size={14} className="lg:w-[16px]" /> <span className="hidden xs:inline">Approve</span>
                       </button>
                       <button
                         onClick={() => updateOTStatus({ id: ot._id, status: 'Rejected' })}
-                        className="bg-rose-500 hover:bg-rose-600 text-white font-black px-5 py-3 rounded-xl transition active:scale-95 flex items-center gap-2 uppercase text-[10px] tracking-widest shadow-lg shadow-rose-100 dark:shadow-rose-900/20"
+                        className="bg-rose-500 hover:bg-rose-600 text-white font-black px-3 lg:px-5 py-2 lg:py-3 rounded-xl transition active:scale-95 flex items-center gap-1.5 lg:gap-2 uppercase text-[9px] lg:text-[10px] tracking-wider lg:tracking-widest shadow-lg shadow-rose-100 dark:shadow-rose-900/20"
                       >
-                        <XCircle size={16} /> Reject
+                        <XCircle size={14} className="lg:w-[16px]" /> <span className="hidden xs:inline">Reject</span>
                       </button>
                     </>
                   ) : (
-                    <div className={`px-5 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest flex items-center gap-2 transition-colors ${
+                    <div className={`px-3 lg:px-5 py-2 lg:py-3 rounded-xl font-black text-[9px] lg:text-[10px] uppercase tracking-wider lg:tracking-widest flex items-center gap-1.5 lg:gap-2 transition-colors ${
                       ot.status === 'Approved' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20' : 'bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-500/20'
                     }`}>
-                      {ot.status === 'Approved' ? <CheckCircle size={16} /> : <XCircle size={16} />}
+                      {ot.status === 'Approved' ? <CheckCircle size={14} className="lg:w-[16px]" /> : <XCircle size={14} className="lg:w-[16px]" />}
                       {ot.status}
                     </div>
                   )}

@@ -14,14 +14,14 @@ import {
 } from '../../features/overtime/overtimeApi';
 import { 
   ClipboardList, Clock, Shield, Calendar, Search,
-  LayoutDashboard, LogOut, Bell, FileSpreadsheet, Users, Settings
+  LayoutDashboard, LogOut, Bell, FileSpreadsheet, Users, Settings, Menu, X
 } from 'lucide-react';
+
 import moment from 'moment';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../features/auth/authSlice';
 
 
-// Sub-components
 import OverviewTab from './components/OverviewTab';
 import AttendanceTab from './components/AttendanceTab';
 import StaffTab from './components/StaffTab';
@@ -38,13 +38,15 @@ const AdminDashboard = () => {
   const [page, setPage] = useState(1);
   const [selectedDate, setSelectedDate] = useState(moment().format('YYYY-MM-DD'));
   const [selectedRecord, setSelectedRecord] = useState(null);
-  const [isValidationModalOpen, setValidationModalOpen] = useState(false);
+   const [isValidationModalOpen, setValidationModalOpen] = useState(false);
   const [isProfileModalOpen, setProfileModalOpen] = useState(false);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
 
   const currentUser = useSelector(selectCurrentUser);
   
-  // Queries
+  
   const { data: userData } = useGetUsersQuery({ page, limit: 10 });
   const { data: adminProfile } = useGetUserProfileQuery();
 
@@ -53,7 +55,6 @@ const AdminDashboard = () => {
   const { data: allOtData } = useGetAllOvertimeQuery({ page, limit: 10, search: searchQuery, status: 'All' });
   const { data: reportData } = useGetDailyReportQuery(selectedDate);
 
-  // Mutations
   const [validateAttendance] = useValidateAttendanceMutation();
   const [updateOTStatus] = useUpdateOvertimeStatusMutation();
 
@@ -105,16 +106,36 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="flex h-screen bg-[#F8FAFC] dark:bg-slate-950 text-slate-900 dark:text-slate-100 overflow-hidden font-sans transition-colors duration-300">
+    <div className="flex h-screen bg-[#F8FAFC] dark:bg-slate-950 text-slate-900 dark:text-slate-100 overflow-hidden font-sans transition-colors duration-300 relative">
       
+      {/* Mobile Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-slate-950/50 backdrop-blur-sm z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className="w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col z-20 shadow-xl shadow-slate-100 dark:shadow-none transition-colors duration-300">
-        <div className="p-8 flex items-center gap-3">
-          <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-200 dark:shadow-indigo-900/20">
-            <Shield size={22} fill="white" />
+      <aside className={`
+        fixed inset-y-0 left-0 z-50 w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shadow-2xl transition-transform duration-300 lg:relative lg:translate-x-0
+        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+      `}>
+        <div className="p-8 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-200 dark:shadow-indigo-900/20">
+              <Shield size={22} fill="white" />
+            </div>
+            <span className="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-200">Admin Panel</span>
           </div>
-          <span className="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-200">Admin Panel</span>
+          <button 
+            className="lg:hidden p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+            onClick={() => setSidebarOpen(false)}
+          >
+            <X size={24} />
+          </button>
         </div>
+
 
         <nav className="flex-1 px-4 space-y-1.5 overflow-y-auto custom-scrollbar">
           {navItems.map((item) => (
@@ -123,10 +144,12 @@ const AdminDashboard = () => {
               onClick={() => { 
                 setActiveTab(item.id); 
                 setPage(1); 
+                setSidebarOpen(false); // Close sidebar on mobile after clicking
                 if (item.id === 'attendance') {
                   refetchAttendance();
                 }
               }}
+
               className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 group ${
                 activeTab === item.id 
                 ? 'bg-indigo-600 text-white shadow-indigo-200 shadow-lg dark:shadow-indigo-900/40' 
@@ -163,43 +186,56 @@ const AdminDashboard = () => {
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col relative overflow-hidden">
+      <div className="flex-1 flex flex-col relative overflow-hidden h-full">
         
         {/* Header Bar */}
-        <header className="h-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-8 flex items-center justify-between sticky top-0 z-10 transition-colors duration-300">
-          <div className="flex items-center gap-4 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 rounded-2xl w-96 border border-slate-100 dark:border-slate-700 transition-all focus-within:ring-2 ring-indigo-100">
-            <Search size={18} className="text-slate-400" />
-            <input 
-              type="text" 
-              placeholder={`Search ${activeTab}...`} 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-transparent text-sm outline-none w-full font-medium dark:text-slate-200" 
-            />
+        <header className="h-20 min-h-[80px] bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 lg:px-8 flex items-center justify-between sticky top-0 z-30 transition-colors duration-300">
+          <div className="flex items-center gap-4">
+            <button 
+              className="lg:hidden p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+              onClick={() => setSidebarOpen(true)}
+            >
+              <Menu size={24} />
+            </button>
+            
+            <div className="hidden sm:flex items-center gap-4 bg-slate-50 dark:bg-slate-800 px-4 py-2.5 rounded-2xl md:w-96 border border-slate-100 dark:border-slate-700 transition-all focus-within:ring-2 ring-indigo-100">
+              <Search size={18} className="text-slate-400" />
+              <input 
+                type="text" 
+                placeholder={`Search ${activeTab}...`} 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="bg-transparent text-sm outline-none w-full font-medium dark:text-slate-200" 
+              />
+            </div>
           </div>
 
-          <div className="flex items-center gap-6">
-            <ThemeToggle />
 
-            <div className="flex items-center rounded-xl border dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-slate-600 dark:text-slate-400">
-              <Calendar size={18} className="mr-2 text-slate-400" />
+          <div className="flex items-center gap-2 lg:gap-6">
+            <div className="hidden xs:block">
+              <ThemeToggle />
+            </div>
+
+            <div className="flex items-center rounded-xl border dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-2 lg:px-3 py-1.5 lg:py-2 text-slate-600 dark:text-slate-400">
+              <Calendar size={16} className="lg:mr-2 text-slate-400" />
               <input 
                 type="date" 
                 value={selectedDate} 
                 onChange={(e) => setSelectedDate(e.target.value)}
-                className="bg-transparent text-xs font-bold outline-none dark:text-slate-200"
+                className="bg-transparent text-[10px] lg:text-xs font-bold outline-none dark:text-slate-200 w-24 lg:w-auto"
               />
             </div>
-            <div className="h-10 w-[1px] bg-slate-200 dark:bg-slate-800"></div>
+            <div className="hidden sm:block h-10 w-[1px] bg-slate-200 dark:bg-slate-800"></div>
+
             <div 
-              className="flex items-center gap-3 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 p-2 rounded-2xl transition-all"
+              className="flex items-center gap-2 lg:gap-3 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 p-1.5 lg:p-2 rounded-2xl transition-all"
               onClick={() => setProfileModalOpen(true)}
             >
-              <div className="text-right">
+              <div className="hidden lg:block text-right">
                 <p className="text-sm font-bold text-slate-800 dark:text-slate-200">{currentUser?.name || 'Super Admin'}</p>
                 <p className="text-[10px] font-bold text-emerald-500 flex items-center justify-end"><span className="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-1.5 animate-pulse"></span>ONLINE</p>
               </div>
-              <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-500/20 rounded-xl flex items-center justify-center text-indigo-700 dark:text-indigo-400 font-black shadow-inner uppercase">
+              <div className="w-9 h-9 lg:w-10 lg:h-10 bg-indigo-100 dark:bg-indigo-500/20 rounded-xl flex items-center justify-center text-indigo-700 dark:text-indigo-400 font-black shadow-inner uppercase text-sm lg:text-base">
                 {currentUser?.name?.substring(0, 2) || 'AD'}
               </div>
 
@@ -208,45 +244,48 @@ const AdminDashboard = () => {
         </header>
 
         {/* Dynamic Main Body */}
-        <main className="flex-1 p-8 overflow-y-auto custom-scrollbar">
-          {activeTab === 'overview' && (
-            <OverviewTab 
-              userData={userData} 
-              attendanceData={attendanceData} 
-              otData={pendingOtData} 
-              onTabChange={setActiveTab} 
-            />
-          )}
-          {activeTab === 'attendance' && (
-            <AttendanceTab 
-              attendanceData={attendanceData} 
-              selectedDate={selectedDate} 
-              page={page} 
-              setPage={setPage} 
-              onOpenValidation={handleOpenValidation} 
-              onExport={handleExport}
-            />
-          )}
-          {activeTab === 'users' && (
-            <StaffTab 
-              userData={userData} 
-              page={page} 
-              setPage={setPage} 
-            />
-          )}
-          {activeTab === 'reports' && (
-            <ReportsTab 
-              reportData={reportData} 
-              selectedDate={selectedDate} 
-            />
-          )}
-          {activeTab === 'overtime' && (
-            <OvertimeTab 
-              otData={allOtData} 
-              updateOTStatus={updateOTStatus} 
-            />
-          )}
+        <main className="flex-1 p-4 lg:p-8 overflow-y-auto custom-scrollbar bg-[#F8FAFC] dark:bg-slate-950">
+          <div className="max-w-7xl mx-auto">
+            {activeTab === 'overview' && (
+              <OverviewTab 
+                userData={userData} 
+                attendanceData={attendanceData} 
+                otData={pendingOtData} 
+                onTabChange={setActiveTab} 
+              />
+            )}
+            {activeTab === 'attendance' && (
+              <AttendanceTab 
+                attendanceData={attendanceData} 
+                selectedDate={selectedDate} 
+                page={page} 
+                setPage={setPage} 
+                onOpenValidation={handleOpenValidation} 
+                onExport={handleExport}
+              />
+            )}
+            {activeTab === 'users' && (
+              <StaffTab 
+                userData={userData} 
+                page={page} 
+                setPage={setPage} 
+              />
+            )}
+            {activeTab === 'reports' && (
+              <ReportsTab 
+                reportData={reportData} 
+                selectedDate={selectedDate} 
+              />
+            )}
+            {activeTab === 'overtime' && (
+              <OvertimeTab 
+                otData={allOtData} 
+                updateOTStatus={updateOTStatus} 
+              />
+            )}
+          </div>
         </main>
+
       </div>
 
       {isValidationModalOpen && (
